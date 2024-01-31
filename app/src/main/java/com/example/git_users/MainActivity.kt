@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.git_users.navigation.ScreenNav
+import com.example.git_users.ui.start_screen.StartScreen
 import com.example.git_users.ui.theme.GitusersTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
                         }
                         composable(ScreenNav.UsersScreenNav.route) {
-
+                            StartScreen()
                         }
                     }
                 }

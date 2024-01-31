@@ -1,8 +1,11 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.kapt)
+    with(libs.plugins) {
+        alias(android.application)
+        alias(kotlin.android)
+        alias(hilt)
+        alias(kapt)
+        alias(kotlin.serialization)
+    }
 }
 
 android {
@@ -61,6 +64,7 @@ dependencies {
 
     //DI
     implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
 
     //Coil
@@ -69,9 +73,18 @@ dependencies {
     //Navigation
     implementation(libs.androidx.navigation.compose)
 
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization)
+
+    //kotlinx.serialization
+    implementation(libs.kotlinx.serialization.json)
+
     with(libs.androidx) {
         implementation(core.ktx)
         implementation(lifecycle.runtime)
+        implementation(lifecycle.runtime.compose)
+        implementation(lifecycle.viewModelCompose)
 
         //Compose
         val composeBom = platform(compose.bom)
