@@ -5,24 +5,24 @@ import com.example.git_users.data.model.NetworkState
 import com.example.git_users.data.model.ProfileNetworkModel
 import com.example.git_users.data.model.UsersListItemNetworkModel
 import com.example.git_users.domain.utils.toProfile
+import com.example.git_users.ui.model.FollowersUiState
 import com.example.git_users.ui.model.Profile
-import com.example.git_users.ui.model.StartScreenUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class GetUsersListUseCase @Inject constructor(private val repository: IRepository) {
+class GetFollowersByLoginUseCase @Inject constructor(private val repository: IRepository) {
 
-    operator fun invoke(): Flow<StartScreenUiState> = flow {
-        when (val networkState = repository.getUsersList()) {
+    operator fun invoke(login: String): Flow<FollowersUiState> = flow {
+        when (val networkState = repository.getFollowersByLogin(login = login)) {
             is NetworkState.Success<List<UsersListItemNetworkModel>> -> {
-                emit(StartScreenUiState.ProfileList(list = networkState.body.map { Profile(login = it.login, avatarUrl = it.avatarUrl) }))
-                emit(StartScreenUiState.ProfileList(list = networkState.body.toListOfProfiles()))
+                emit(FollowersUiState.FollowersList(networkState.body.map { Profile(login = it.login, avatarUrl = it.avatarUrl) }))
+                emit(FollowersUiState.FollowersList(networkState.body.toListOfProfiles()))
             }
             is NetworkState.Error -> {
-                emit(StartScreenUiState.Error)
+                emit(FollowersUiState.Error)
             }
         }
     }.flowOn(Dispatchers.IO)

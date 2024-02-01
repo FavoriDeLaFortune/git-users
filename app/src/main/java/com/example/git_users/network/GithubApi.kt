@@ -13,4 +13,7 @@ interface GithubApi {
 
     @GET("users/{login}")
     suspend fun getProfileInfo(@Path("login", encoded = true) login: String): Response<ProfileNetworkModel>
+
+    @GET("users/{login}/followers")
+    suspend fun getFollowersByLogin(@Path("login", encoded = true) login: String): Response<List<UsersListItemNetworkModel>>
 }

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.git_users.domain.GetUsersListUseCase
-import com.example.git_users.ui.model.UiState
+import com.example.git_users.ui.model.StartScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -15,12 +15,10 @@ import javax.inject.Inject
 class StartScreenViewModel @Inject constructor(
     getUsersListUseCase: GetUsersListUseCase
 ) : ViewModel() {
-    private var _uiStateFlow = MutableStateFlow<UiState>(UiState.Initial)
+    private var _uiStateFlow = MutableStateFlow<StartScreenUiState>(StartScreenUiState.Initial)
     val uiStateFlow = _uiStateFlow
 
     init {
-        getUsersListUseCase.invoke().onEach { _uiStateFlow.value = it
-            Log.d("logigi", "$it")
-        }.launchIn(viewModelScope)
+        getUsersListUseCase.invoke().onEach { _uiStateFlow.value = it }.launchIn(viewModelScope)
     }
 }

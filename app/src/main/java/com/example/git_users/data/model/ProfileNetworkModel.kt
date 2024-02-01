@@ -5,20 +5,24 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProfileNetworkModel(
+    @SerialName("login")
+    val login: String,
+    @SerialName("avatar_url")
+    val avatarUrl: String,
     @SerialName("name")
-    val name: String?,
+    val name: String? = null,
     @SerialName("company")
-    val company: String?,
+    val company: String? = null,
     @SerialName("email")
-    val email: String?,
+    val email: String? = null,
     @SerialName("blog")
-    val blog: String?,
+    val blog: String? = null,
     @SerialName("location")
-    val location: String?,
+    val location: String? = null,
     @SerialName("public_repos")
-    val reposCount: Int,
+    val reposCount: Int? = null,
     @SerialName("followers")
-    val followers: Int,
+    val followers: Int? = null,
     @SerialName("bio")
-    val bio: String?,
+    val bio: String? = null,
 )

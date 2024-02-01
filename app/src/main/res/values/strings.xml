@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">git-users</string>
+    <string name="subscribers">Подписчики</string>
+    <string name="users">Пользователи</string>
+    <plurals name="repos_count">
+        <item quantity="one">$s репозиторий</item>
+        <item quantity="two">$s репозитория</item>
+        <item quantity="few">$s репозитория</item>
+        <item quantity="other">$s репозиториев</item>
+    </plurals>
+    <plurals name="subscribers_count">
+        <item quantity="one">$s подписчик</item>
+        <item quantity="two">$s подписчика</item>
+        <item quantity="few">$s подписчика</item>
+        <item quantity="other">$s подписчиков</item>
+    </plurals>
 </resources>

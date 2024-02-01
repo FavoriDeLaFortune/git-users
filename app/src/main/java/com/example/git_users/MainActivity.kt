@@ -10,10 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.git_users.navigation.ScreenNav
+import com.example.git_users.ui.profile_screen.ProfileScreen
 import com.example.git_users.ui.start_screen.StartScreen
 import com.example.git_users.ui.theme.GitusersTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,12 +33,23 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = ScreenNav.UsersScreenNav.route) {
-                        composable(ScreenNav.ProfileScreenNav.route) {
-
+                    NavHost(
+                        navController = navController,
+                        startDestination = ScreenNav.UsersScreenNav.route
+                    ) {
+                        composable(
+                            route = ScreenNav.ProfileScreenNav.route,
+                            arguments = listOf(navArgument(ScreenNav.PROFILE_ITEM_ARGUMENT) {
+                                type = NavType.StringType
+                            })
+                        ) { backStackEntry ->
+                            val login = backStackEntry.arguments?.getString(ScreenNav.PROFILE_ITEM_ARGUMENT)
+                            if (login != null) {
+                                ProfileScreen(navController = navController, login = login)
+                            }
                         }
                         composable(ScreenNav.UsersScreenNav.route) {
-                            StartScreen()
+                            StartScreen(navController = navController)
                         }
                     }
                 }
