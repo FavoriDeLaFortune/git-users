@@ -1,13 +1,10 @@
 package com.example.git_users.di
 
-import android.content.Context
-import coil.ImageLoader
 import com.example.git_users.network.GithubApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor

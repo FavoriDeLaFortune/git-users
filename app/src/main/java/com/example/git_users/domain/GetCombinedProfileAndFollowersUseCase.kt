@@ -1,6 +1,6 @@
 package com.example.git_users.domain
 
-import com.example.git_users.ui.model.ProfileScreenUiState
+import com.example.git_users.ui.profile_screen.contract.ProfileScreenUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -21,7 +21,11 @@ class GetCombinedProfileAndFollowersUseCase @Inject constructor(
                 profileState.copy(followersUiState = followersState)
             }
             is ProfileScreenUiState.Error -> {
-                ProfileScreenUiState.Error
+                ProfileScreenUiState.Error(code = profileState.code, message = profileState.message)
+            }
+            // This case is unexpected. ProfileScreenUiState should be mapped in ViewModel layer.
+            is ProfileScreenUiState.Initial -> {
+                ProfileScreenUiState.Initial
             }
         }
     }.flowOn(Dispatchers.IO)

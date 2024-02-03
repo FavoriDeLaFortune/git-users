@@ -1,10 +1,9 @@
 package com.example.git_users.ui.start_screen.stateholder
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.git_users.domain.GetUsersListUseCase
-import com.example.git_users.ui.model.StartScreenUiState
+import com.example.git_users.ui.start_screen.contract.StartScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

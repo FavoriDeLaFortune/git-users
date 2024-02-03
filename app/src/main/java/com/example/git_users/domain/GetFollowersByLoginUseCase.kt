@@ -5,7 +5,8 @@ import com.example.git_users.data.model.NetworkState
 import com.example.git_users.data.model.ProfileNetworkModel
 import com.example.git_users.data.model.UsersListItemNetworkModel
 import com.example.git_users.domain.utils.toProfile
-import com.example.git_users.ui.model.FollowersUiState
+import com.example.git_users.ui.model.ExtendedInfoState
+import com.example.git_users.ui.profile_screen.contract.FollowersUiState
 import com.example.git_users.ui.model.Profile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,7 @@ class GetFollowersByLoginUseCase @Inject constructor(private val repository: IRe
                 emit(FollowersUiState.FollowersList(networkState.body.toListOfProfiles()))
             }
             is NetworkState.Error -> {
-                emit(FollowersUiState.Error)
+                emit(FollowersUiState.Error(code = networkState.code, message = networkState.message))
             }
         }
     }.flowOn(Dispatchers.IO)
@@ -34,7 +35,14 @@ class GetFollowersByLoginUseCase @Inject constructor(private val repository: IRe
                     networkState.body.toProfile()
                 }
                 is NetworkState.Error -> {
-                    Profile(login = usersListItem.login, avatarUrl = usersListItem.avatarUrl)
+                    Profile(
+                        login = usersListItem.login,
+                        avatarUrl = usersListItem.avatarUrl,
+                        extendedInfo = ExtendedInfoState.Error(
+                            code = networkState.code,
+                            message = networkState.message
+                        )
+                    )
                 }
             }
         }

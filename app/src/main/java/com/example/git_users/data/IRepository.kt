@@ -5,7 +5,7 @@ import com.example.git_users.data.model.ProfileNetworkModel
 import com.example.git_users.data.model.UsersListItemNetworkModel
 import retrofit2.Response
 
-abstract class IRepository() {
+abstract class IRepository {
 
     abstract suspend fun getUsersList(): NetworkState<List<UsersListItemNetworkModel>>
 

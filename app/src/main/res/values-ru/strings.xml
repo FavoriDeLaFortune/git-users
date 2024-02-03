@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">git-users</string>
+    <string name="followers">Подписчики</string>
+    <string name="users">Пользователи</string>
+    <plurals name="repos_count">
+        <item quantity="one">%1$s репозиторий</item>
+        <item quantity="few">%1$s репозитория</item>
+        <item quantity="other">%1$s репозиториев</item>
+        <item quantity="many">%1$s репозиториев</item>
+    </plurals>
+    <plurals name="subscribers_count">
+        <item quantity="one">%1$s подписчик</item>
+        <item quantity="few">%1$s подписчика</item>
+        <item quantity="other">%1$s подписчиков</item>
+        <item quantity="many">%1$s подписчиков</item>
+    </plurals>
+    <string name="text_placement">%1$s</string>
+    <string name="information">Информация</string>
+    <string name="no_information_placement">%1$s: не указано</string>
+    <string name="no_information_name">Имя</string>
+    <string name="no_information_email">Эл. почта</string>
+    <string name="no_information_location">Локация</string>
+    <string name="no_information_company">Компания</string>
+    <string name="no_information_blog">Блог</string>
+    <string name="error_message">Ошибка %1$d: %2$s</string>
+    <string name="snackbar_close">Закрыть</string>
+    <string name="no_network">Нет подключения к сети</string>
+</resources>

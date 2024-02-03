@@ -1,19 +1,23 @@
 package com.example.git_users.ui.start_screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,12 +29,18 @@ import com.example.git_users.R
 import com.example.git_users.ui.components.cards.ProfileSmallCard
 import com.example.git_users.ui.components.texts.LargeText
 import com.example.git_users.ui.model.Profile
-import com.example.git_users.ui.model.StartScreenUiState
+import com.example.git_users.ui.start_screen.contract.StartScreenUiState
 import com.example.git_users.ui.start_screen.stateholder.StartScreenViewModel
+import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StartScreen(navController: NavHostController) {
+fun StartScreen(
+    navController: NavHostController,
+    snackbarHostState: SnackbarHostState,
+    showDismissSnackbar: @Composable (String) -> Unit,
+    connectionIsOnline: Boolean
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -40,34 +50,48 @@ fun StartScreen(navController: NavHostController) {
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
-    ) { topBarPaddingValues ->
-        val viewModel: StartScreenViewModel = hiltViewModel()
-        val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
-        when (uiState) {
-            StartScreenUiState.Initial -> {
-                Log.d("logigi", "initial state")
-            }
-
-            StartScreenUiState.Error -> {}
-            is StartScreenUiState.ProfileList -> {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier
-                        .padding(horizontal = 32.dp, vertical = 8.dp)
-                        .padding(topBarPaddingValues)
-                ) {
-                    items((uiState as StartScreenUiState.ProfileList).list) { profile ->
-                        ProfileSmallCard(
-                            login = profile.login,
-                            avatarUrl = profile.avatarUrl,
-                            reposCount = profile.reposCount,
-                            followersCount = profile.followers,
-                            onClick = {
-                                navController.navigate("profile_screen/profile=${profile.login}")
-                            }
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { paddingValues ->
+        if (!connectionIsOnline) {
+            showDismissSnackbar.invoke(stringResource(id = R.string.no_network))
+        } else {
+            val viewModel: StartScreenViewModel = hiltViewModel()
+            val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+            when (uiState) {
+                StartScreenUiState.Initial -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .wrapContentSize(Alignment.Center)
+                    )
+                }
+                is StartScreenUiState.Error -> {
+                    showDismissSnackbar.invoke(
+                        stringResource(
+                            id = R.string.error_message,
+                            (uiState as StartScreenUiState.Error).code,
+                            (uiState as StartScreenUiState.Error).message
                         )
+                    )
+                }
+                is StartScreenUiState.ProfileList -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 32.dp, vertical = 8.dp)
+                            .padding(paddingValues)
+                    ) {
+                        items((uiState as StartScreenUiState.ProfileList).list) { profile ->
+                            ProfileSmallCard(
+                                profile = profile,
+                                connectionIsOnline = connectionIsOnline,
+                                onClick = {
+                                    navController.navigate("profile_screen/profile=${profile.login}")
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -93,12 +117,7 @@ fun StartScreenProfileListPreview() {
         modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)
     ) {
         items(list) { profile ->
-            ProfileSmallCard(
-                login = profile.login,
-                avatarUrl = profile.avatarUrl,
-                reposCount = profile.reposCount,
-                followersCount = profile.followers
-            )
+
         }
     }
 }

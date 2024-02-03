@@ -1,17 +1,24 @@
 <resources>
     <string name="app_name">git-users</string>
-    <string name="subscribers">Подписчики</string>
-    <string name="users">Пользователи</string>
+    <string name="followers">Followers</string>
+    <string name="users">Users</string>
     <plurals name="repos_count">
-        <item quantity="one">$s репозиторий</item>
-        <item quantity="two">$s репозитория</item>
-        <item quantity="few">$s репозитория</item>
-        <item quantity="other">$s репозиториев</item>
+        <item quantity="one">%1$s repository</item>
+        <item quantity="other">%1$s repositories</item>
     </plurals>
     <plurals name="subscribers_count">
-        <item quantity="one">$s подписчик</item>
-        <item quantity="two">$s подписчика</item>
-        <item quantity="few">$s подписчика</item>
-        <item quantity="other">$s подписчиков</item>
+        <item quantity="one">%1$s subscriber</item>
+        <item quantity="other">%1$s subscribers</item>
     </plurals>
+    <string name="text_placement">%1$s</string>
+    <string name="information">Information</string>
+    <string name="no_information_placement">%1$s: not indicated</string>
+    <string name="no_information_name">Name</string>
+    <string name="no_information_email">Email</string>
+    <string name="no_information_location">Location</string>
+    <string name="no_information_company">Company</string>
+    <string name="no_information_blog">Blog</string>
+    <string name="error_message">Error %1$d: %2$s</string>
+    <string name="snackbar_close">Dismiss</string>
+    <string name="no_network">No connection to network</string>
 </resources>

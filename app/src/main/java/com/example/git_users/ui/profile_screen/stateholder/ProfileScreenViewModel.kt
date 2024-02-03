@@ -3,7 +3,7 @@ package com.example.git_users.ui.profile_screen.stateholder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.git_users.domain.GetCombinedProfileAndFollowersUseCase
-import com.example.git_users.ui.model.ProfileScreenUiState
+import com.example.git_users.ui.profile_screen.contract.ProfileScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -16,12 +16,12 @@ class ProfileScreenViewModel @Inject constructor(
     private val getCombinedProfileAndFollowersUseCase: GetCombinedProfileAndFollowersUseCase
 ) : ViewModel() {
     private var loginFlow = MutableStateFlow("")
-    private var _uiStateFlow = MutableStateFlow<ProfileScreenUiState>(ProfileScreenUiState.Error)
+    private var _uiStateFlow = MutableStateFlow<ProfileScreenUiState>(ProfileScreenUiState.Initial)
     val uiStateFlow = _uiStateFlow
 
     init {
         loginFlow.onEach { login ->
-            getCombinedProfileAndFollowersUseCase.invoke(login).collect { _uiStateFlow.value = it }
+            if (login != "") getCombinedProfileAndFollowersUseCase.invoke(login).collect { _uiStateFlow.value = it }
         }.launchIn(viewModelScope)
     }
 

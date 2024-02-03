@@ -20,9 +20,9 @@ data class ProfileNetworkModel(
     @SerialName("location")
     val location: String? = null,
     @SerialName("public_repos")
-    val reposCount: Int? = null,
+    val reposCount: Int,
     @SerialName("followers")
-    val followers: Int? = null,
+    val followers: Int,
     @SerialName("bio")
     val bio: String? = null,
 )

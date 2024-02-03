@@ -12,26 +12,38 @@ import javax.inject.Inject
 class GithubRepository @Inject constructor(private val githubApi: GithubApi) : IRepository() {
 
     override suspend fun getUsersList(): NetworkState<List<UsersListItemNetworkModel>> = withContext(Dispatchers.IO) {
-        val response = githubApi.getUsersList()
+        val response = try {
+            githubApi.getUsersList()
+        } catch (e: Exception) {
+            return@withContext NetworkState.Error(0, "unspecified")
+        }
         return@withContext resolveBodyFromResponse(response = response)
     }
 
     override suspend fun getProfileModel(login: String): NetworkState<ProfileNetworkModel> = withContext(Dispatchers.IO) {
-        val response = githubApi.getProfileInfo(login = login)
+        val response = try {
+            githubApi.getProfileInfo(login = login)
+        } catch (e: Exception) {
+            return@withContext NetworkState.Error(0, "unspecified")
+        }
         return@withContext resolveBodyFromResponse(response = response)
     }
 
     override suspend fun getFollowersByLogin(login: String): NetworkState<List<UsersListItemNetworkModel>> = withContext(Dispatchers.IO) {
-        val response = githubApi.getFollowersByLogin(login = login)
+        val response = try {
+            githubApi.getFollowersByLogin(login = login)
+        } catch (e: Exception) {
+            return@withContext NetworkState.Error(0, "unspecified")
+        }
         return@withContext resolveBodyFromResponse(response = response)
     }
 
     override fun <T> resolveBodyFromResponse(response: Response<T>): NetworkState<T> {
-        return if (response.isSuccessful && response.body() != null) {
-            // used strict operator cause response body isn't null in this section
-            NetworkState.Success(response.body()!!)
+        val body = response.body()
+        return if (response.isSuccessful && body != null) {
+            NetworkState.Success(body = body)
         } else {
-            NetworkState.Error
+            NetworkState.Error(code = response.code(), message = response.message())
         }
     }
 
