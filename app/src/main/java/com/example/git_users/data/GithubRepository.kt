@@ -7,6 +7,7 @@ import com.example.git_users.network.GithubApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class GithubRepository @Inject constructor(private val githubApi: GithubApi) : IRepository() {
@@ -14,8 +15,8 @@ class GithubRepository @Inject constructor(private val githubApi: GithubApi) : I
     override suspend fun getUsersList(): NetworkState<List<UsersListItemNetworkModel>> = withContext(Dispatchers.IO) {
         val response = try {
             githubApi.getUsersList()
-        } catch (e: Exception) {
-            return@withContext NetworkState.Error(0, "unspecified")
+        } catch (e: UnknownHostException) {
+            return@withContext NetworkState.Error(0, "Unable to connect host")
         }
         return@withContext resolveBodyFromResponse(response = response)
     }
@@ -23,8 +24,8 @@ class GithubRepository @Inject constructor(private val githubApi: GithubApi) : I
     override suspend fun getProfileModel(login: String): NetworkState<ProfileNetworkModel> = withContext(Dispatchers.IO) {
         val response = try {
             githubApi.getProfileInfo(login = login)
-        } catch (e: Exception) {
-            return@withContext NetworkState.Error(0, "unspecified")
+        } catch (e: UnknownHostException) {
+            return@withContext NetworkState.Error(0, "Unable to connect host")
         }
         return@withContext resolveBodyFromResponse(response = response)
     }
@@ -32,8 +33,8 @@ class GithubRepository @Inject constructor(private val githubApi: GithubApi) : I
     override suspend fun getFollowersByLogin(login: String): NetworkState<List<UsersListItemNetworkModel>> = withContext(Dispatchers.IO) {
         val response = try {
             githubApi.getFollowersByLogin(login = login)
-        } catch (e: Exception) {
-            return@withContext NetworkState.Error(0, "unspecified")
+        } catch (e: UnknownHostException) {
+            return@withContext NetworkState.Error(0, "Unable to connect host")
         }
         return@withContext resolveBodyFromResponse(response = response)
     }

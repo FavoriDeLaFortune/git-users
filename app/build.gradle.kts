@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     with(libs.plugins) {
         alias(android.application)
@@ -23,6 +25,19 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val property = Properties()
+        property.load(project.rootProject.file("local.properties").inputStream())
+
+        buildConfigField("String", "ACCEPT_FIELD", "\"${property.getProperty("ACCEPT_FIELD")}\"")
+        buildConfigField("String", "API_VERSION_FIELD", "\"${property.getProperty("API_VERSION_FIELD")}\"")
+        buildConfigField("String", "API_AUTHORIZATION_FIELD", "\"${property.getProperty("API_AUTHORIZATION_FIELD")}\"")
+        buildConfigField("String", "ACCEPT_PARAMETER", "\"${property.getProperty("ACCEPT_PARAMETER")}\"")
+        buildConfigField("String", "API_VERSION_PARAMETER", "\"${property.getProperty("API_VERSION_PARAMETER")}\"")
+        buildConfigField("String", "API_AUTHORIZATION_PARAMETER", "\"${property.getProperty("API_AUTHORIZATION_PARAMETER")}\"")
+        buildConfigField("String", "API_BASE_URL", "\"${property.getProperty("API_BASE_URL")}\"")
+
+        buildFeatures.buildConfig = true
     }
 
     buildTypes {

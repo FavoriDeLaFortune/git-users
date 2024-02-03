@@ -1,5 +1,6 @@
 package com.example.git_users.di
 
+import com.example.git_users.BuildConfig
 import com.example.git_users.network.GithubApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -20,9 +21,9 @@ object NetworkModule {
     fun provideInterceptor(): Interceptor {
         return Interceptor { interceptor ->
             val request = interceptor.request().newBuilder()
-                .addHeader("Accept", "application/vnd.github+json")
-                .addHeader("X-GitHub-Api-Version", "2022-11-28")
-                .addHeader("Authorization", "Bearer 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")
+                .addHeader(BuildConfig.ACCEPT_FIELD, BuildConfig.ACCEPT_PARAMETER)
+                .addHeader(BuildConfig.API_VERSION_FIELD, BuildConfig.API_VERSION_PARAMETER)
+                .addHeader(BuildConfig.API_AUTHORIZATION_FIELD, BuildConfig.API_AUTHORIZATION_PARAMETER)
                 .build()
             return@Interceptor interceptor.proceed(request)
         }
@@ -37,7 +38,7 @@ object NetworkModule {
         }
         return Retrofit.Builder()
             .addConverterFactory(json.asConverterFactory(contentType))
-            .baseUrl("https://api.github.com/")
+            .baseUrl(BuildConfig.API_BASE_URL)
             .client(okHttpClient)
             .build()
     }
