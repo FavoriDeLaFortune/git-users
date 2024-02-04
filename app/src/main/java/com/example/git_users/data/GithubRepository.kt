@@ -1,5 +1,6 @@
 package com.example.git_users.data
 
+import android.util.Log
 import com.example.git_users.data.model.NetworkState
 import com.example.git_users.data.model.ProfileNetworkModel
 import com.example.git_users.data.model.UsersListItemNetworkModel

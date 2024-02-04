@@ -8,13 +8,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
-fun MediumText(text: String, modifier: Modifier = Modifier, textAlign: TextAlign = TextAlign.Center) {
+fun MediumText(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
+    maxLines: Int = 1
+) {
     Text(
         text = text,
         modifier = modifier,
         textAlign = textAlign,
         style = MaterialTheme.typography.bodyMedium,
-        maxLines = 1,
+        maxLines = maxLines,
         overflow = TextOverflow.Ellipsis
     )
 }

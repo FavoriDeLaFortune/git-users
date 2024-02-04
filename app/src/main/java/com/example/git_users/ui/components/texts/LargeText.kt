@@ -16,6 +16,6 @@ fun LargeText(text: String, modifier: Modifier = Modifier, textAlign: TextAlign 
         textAlign = textAlign,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
-        style = MaterialTheme.typography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge.copy(MaterialTheme.colorScheme.onSurface),
     )
 }

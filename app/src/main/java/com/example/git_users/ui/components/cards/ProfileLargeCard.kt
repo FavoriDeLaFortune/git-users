@@ -60,7 +60,8 @@ fun ProfileLargeCard(
                     ProfileMediumText(
                         text = profile.extendedInfo.bio,
                         exceptionText = stringResource(id = R.string.information),
-                        modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
+                        modifier = Modifier.padding(start = 16.dp, bottom = 16.dp, end = 16.dp),
+                        maxLines = Int.MAX_VALUE
                     )
                 }
                 is ExtendedInfoState.Error -> {

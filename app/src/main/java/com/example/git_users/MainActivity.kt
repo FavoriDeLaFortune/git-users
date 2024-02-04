@@ -17,7 +17,7 @@ import com.example.git_users.navigation.utils.navigateToProfileScreen
 import com.example.git_users.navigation.utils.navigateToStartScreen
 import com.example.git_users.services.AppConnectivityManager
 import com.example.git_users.ui.components.snackbars.DismissSnackbar
-import com.example.git_users.ui.theme.GitusersTheme
+import com.example.git_users.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GitusersTheme {
+            AppTheme {
                 val navController = rememberNavController()
                 val snackbarHostState = remember { SnackbarHostState() }
                 val coroutineScope = rememberCoroutineScope()

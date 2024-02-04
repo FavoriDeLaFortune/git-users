@@ -11,19 +11,22 @@ fun ProfileMediumText(
     text: String?,
     exceptionText: String,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Start
+    textAlign: TextAlign = TextAlign.Start,
+    maxLines: Int = 1
 ) {
     if (text.isNullOrBlank()) {
         MediumText(
             text = stringResource(id = R.string.no_information_placement, exceptionText),
             modifier = modifier,
-            textAlign = textAlign
+            textAlign = textAlign,
+            maxLines = maxLines
         )
     } else {
         MediumText(
             text = text,
             modifier = modifier,
-            textAlign = textAlign
+            textAlign = textAlign,
+            maxLines = maxLines
         )
     }
 }
