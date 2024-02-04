@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.git_users.R
+import com.example.git_users.navigation.utils.navigateToProfileScreen
 import com.example.git_users.ui.components.buttons.BackTopAppBarButton
 import com.example.git_users.ui.components.cards.ProfileLargeCard
 import com.example.git_users.ui.components.cards.ProfileSmallCard
@@ -37,59 +38,45 @@ import com.example.git_users.ui.profile_screen.contract.FollowersUiState
 import com.example.git_users.ui.profile_screen.contract.ProfileScreenUiState
 import com.example.git_users.ui.profile_screen.stateholder.ProfileScreenViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState,
     login: String,
     showDismissSnackbar: @Composable (String) -> Unit,
-    connectionIsOnline: Boolean
+    connectionIsOnline: Boolean,
+    paddingValues: PaddingValues
 ) {
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    LargeText(text = login)
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-                navigationIcon = { BackTopAppBarButton(navController = navController) }
-            )
-        },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) { paddingValues ->
-        if (!connectionIsOnline) {
-            showDismissSnackbar.invoke(stringResource(id = R.string.no_network))
-        } else {
-            val viewModel: ProfileScreenViewModel = hiltViewModel()
-            viewModel.setLogin(login = login)
-            val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
-            when (uiState) {
-                is ProfileScreenUiState.Initial -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .wrapContentSize(Alignment.Center)
+    if (!connectionIsOnline) {
+        showDismissSnackbar.invoke(stringResource(id = R.string.no_network))
+    } else {
+        val viewModel: ProfileScreenViewModel = hiltViewModel()
+        viewModel.setLogin(login = login)
+        val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+        when (uiState) {
+            is ProfileScreenUiState.Initial -> {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize(Alignment.Center)
+                )
+            }
+            is ProfileScreenUiState.ProfileInfo -> {
+                ProfileLazyGrid(
+                    uiState = uiState as ProfileScreenUiState.ProfileInfo,
+                    paddingValues = paddingValues,
+                    navController = navController,
+                    showDismissSnackbar = showDismissSnackbar,
+                    connectionIsOnline = connectionIsOnline
+                )
+            }
+            is ProfileScreenUiState.Error -> {
+                showDismissSnackbar.invoke(
+                    stringResource(
+                        id = R.string.error_message,
+                        (uiState as ProfileScreenUiState.Error).code,
+                        (uiState as ProfileScreenUiState.Error).message
                     )
-                }
-                is ProfileScreenUiState.ProfileInfo -> {
-                    ProfileLazyGrid(
-                        uiState = uiState as ProfileScreenUiState.ProfileInfo,
-                        paddingValues = paddingValues,
-                        navController = navController,
-                        showDismissSnackbar = showDismissSnackbar,
-                        connectionIsOnline = connectionIsOnline
-                    )
-                }
-                is ProfileScreenUiState.Error -> {
-                    showDismissSnackbar.invoke(
-                        stringResource(
-                            id = R.string.error_message,
-                            (uiState as ProfileScreenUiState.Error).code,
-                            (uiState as ProfileScreenUiState.Error).message
-                        )
-                    )
-                }
+                )
             }
         }
     }
@@ -146,7 +133,7 @@ fun ProfileLazyGrid(
                             profile = profile,
                             connectionIsOnline = connectionIsOnline,
                             onClick = {
-                                navController.navigate("profile_screen/profile=${profile.login}")
+                                navController.navigateToProfileScreen(profile.login)
                             }
                         )
                     }

@@ -1,6 +1,6 @@
 package com.example.git_users.navigation.utils
 
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -11,11 +11,12 @@ import com.example.git_users.navigation.ScreenNav
 import com.example.git_users.ui.profile_screen.ProfileScreen
 import com.example.git_users.ui.start_screen.StartScreen
 
-fun NavGraphBuilder.navigateToProfileScreen(
+fun NavGraphBuilder.addProfileScreenRoute(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState,
     showDismissSnackbar: @Composable (String) -> Unit,
-    connectionIsOnline: Boolean
+    connectionIsOnline: Boolean,
+    paddingValues: PaddingValues,
+    scaffoldConfigure: @Composable (String) -> Unit
 ) {
     composable(
         route = ScreenNav.ProfileScreenNav.route,
@@ -25,29 +26,37 @@ fun NavGraphBuilder.navigateToProfileScreen(
     ) { backStackEntry ->
         val login = backStackEntry.arguments?.getString(ScreenNav.PROFILE_ITEM_ARGUMENT)
         if (login != null) {
+            scaffoldConfigure.invoke(login)
             ProfileScreen(
                 navController = navController,
-                snackbarHostState = snackbarHostState,
                 login = login,
                 showDismissSnackbar = showDismissSnackbar,
-                connectionIsOnline = connectionIsOnline
+                connectionIsOnline = connectionIsOnline,
+                paddingValues = paddingValues
             )
         }
     }
 }
 
-fun NavGraphBuilder.navigateToStartScreen(
+fun NavGraphBuilder.addStartScreenRoute(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState,
     showDismissSnackbar: @Composable (String) -> Unit,
-    connectionIsOnline: Boolean
+    connectionIsOnline: Boolean,
+    paddingValues: PaddingValues,
+    scaffoldConfigure: @Composable () -> Unit
 ) {
     composable(ScreenNav.UsersScreenNav.route) {
+        scaffoldConfigure.invoke()
         StartScreen(
             navController = navController,
-            snackbarHostState = snackbarHostState,
             showDismissSnackbar = showDismissSnackbar,
-            connectionIsOnline = connectionIsOnline
+            connectionIsOnline = connectionIsOnline,
+            paddingValues = paddingValues
         )
     }
 }
+
+fun NavHostController.navigateToProfileScreen(login: String) {
+    this.navigate("profile_screen/profile=$login")
+}
+

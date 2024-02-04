@@ -1,6 +1,7 @@
 package com.example.git_users.ui.start_screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -26,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.git_users.R
+import com.example.git_users.navigation.utils.navigateToProfileScreen
 import com.example.git_users.ui.components.cards.ProfileSmallCard
 import com.example.git_users.ui.components.texts.LargeText
 import com.example.git_users.ui.model.Profile
@@ -33,65 +35,52 @@ import com.example.git_users.ui.start_screen.contract.StartScreenUiState
 import com.example.git_users.ui.start_screen.stateholder.StartScreenViewModel
 import kotlinx.coroutines.CoroutineScope
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartScreen(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState,
     showDismissSnackbar: @Composable (String) -> Unit,
-    connectionIsOnline: Boolean
+    connectionIsOnline: Boolean,
+    paddingValues: PaddingValues
 ) {
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    LargeText(text = stringResource(id = R.string.users))
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
-            )
-        },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) { paddingValues ->
-        if (!connectionIsOnline) {
-            showDismissSnackbar.invoke(stringResource(id = R.string.no_network))
-        } else {
-            val viewModel: StartScreenViewModel = hiltViewModel()
-            val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
-            when (uiState) {
-                StartScreenUiState.Initial -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .wrapContentSize(Alignment.Center)
+    if (!connectionIsOnline) {
+        showDismissSnackbar.invoke(stringResource(id = R.string.no_network))
+    } else {
+        val viewModel: StartScreenViewModel = hiltViewModel()
+        val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+        when (uiState) {
+            StartScreenUiState.Initial -> {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize(Alignment.Center)
+                )
+            }
+            is StartScreenUiState.Error -> {
+                showDismissSnackbar.invoke(
+                    stringResource(
+                        id = R.string.error_message,
+                        (uiState as StartScreenUiState.Error).code,
+                        (uiState as StartScreenUiState.Error).message
                     )
-                }
-                is StartScreenUiState.Error -> {
-                    showDismissSnackbar.invoke(
-                        stringResource(
-                            id = R.string.error_message,
-                            (uiState as StartScreenUiState.Error).code,
-                            (uiState as StartScreenUiState.Error).message
+                )
+            }
+            is StartScreenUiState.ProfileList -> {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 32.dp, vertical = 8.dp)
+                        .padding(paddingValues)
+                ) {
+                    items((uiState as StartScreenUiState.ProfileList).list) { profile ->
+                        ProfileSmallCard(
+                            profile = profile,
+                            connectionIsOnline = connectionIsOnline,
+                            onClick = {
+                                navController.navigateToProfileScreen(profile.login)
+                            }
                         )
-                    )
-                }
-                is StartScreenUiState.ProfileList -> {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier
-                            .padding(horizontal = 32.dp, vertical = 8.dp)
-                            .padding(paddingValues)
-                    ) {
-                        items((uiState as StartScreenUiState.ProfileList).list) { profile ->
-                            ProfileSmallCard(
-                                profile = profile,
-                                connectionIsOnline = connectionIsOnline,
-                                onClick = {
-                                    navController.navigate("profile_screen/profile=${profile.login}")
-                                }
-                            )
-                        }
                     }
                 }
             }
