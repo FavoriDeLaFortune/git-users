@@ -16,5 +16,5 @@ Cписок пользователей сайта github.com с использо
 ## Экраны приложения
 | Светлая тема | Темная тема |
 | ----------- | ----------- |
-| ![start_screen_light](https://github.com/FavoriDeLaFortune/git-users/readme_images/start_screen_light.jpg) | ![start_screen_dark.](https://github.com/FavoriDeLaFortune/git-users/readme_images/start_screen_dark.jpg) |
-| ![profile_screen_light](https://github.com/FavoriDeLaFortune/git-users/readme_images/profile_screen_light.jpg) | ![profile_screen_dark](https://github.com/FavoriDeLaFortune/git-users/readme_images/profile_screen_dark.jpg) |
+| ![start_screen_light](./readme_images/start_screen_light.jpg) | ![start_screen_dark.](./readme_images/start_screen_dark.jpg) |
+| ![profile_screen_light](./readme_images/profile_screen_light.jpg) | ![profile_screen_dark](./readme_images/profile_screen_dark.jpg) |
