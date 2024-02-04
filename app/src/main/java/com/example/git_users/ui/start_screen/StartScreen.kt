@@ -8,14 +8,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,11 +22,9 @@ import androidx.navigation.NavHostController
 import com.example.git_users.R
 import com.example.git_users.navigation.utils.navigateToProfileScreen
 import com.example.git_users.ui.components.cards.ProfileSmallCard
-import com.example.git_users.ui.components.texts.LargeText
 import com.example.git_users.ui.model.Profile
 import com.example.git_users.ui.start_screen.contract.StartScreenUiState
 import com.example.git_users.ui.start_screen.stateholder.StartScreenViewModel
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun StartScreen(
