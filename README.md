@@ -1,6 +1,6 @@
 # Приложение git-users
 Cписок пользователей сайта github.com с использованием [Github API](https://docs.github.com/ru/rest/users/users?apiVersion=2022-11-28#list-users).\
-Рабочий (до 4 марта 2024 года) apk лежит в директории [/apks](./apks) в корне проекта.
+Apk лежит в директории [/apks](./apks) в корне проекта.
 
 ## Стэк
 - MVVM
